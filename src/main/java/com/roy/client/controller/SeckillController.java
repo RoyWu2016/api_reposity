@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.roy.publics.seckill.bean.SecKill;
 import com.roy.publics.seckill.service.SecKillService;
+import com.roy.publics.utils.ProtoStuffUtil;
 
 @RestController
 @RequestMapping("/seckill")
@@ -24,12 +25,18 @@ public class SeckillController {
 	private SecKillService secKillService;
 
 	@RequestMapping(value = "/{secKillId}/detail", method = RequestMethod.GET)
-	public ResponseEntity<String> detail(@PathVariable("secKillId") String secKillId) {
+	public ResponseEntity<String> detail(@PathVariable("secKillId") String secKillId) throws Exception {
 		logger.info(secKillId);
 		long id = Long.parseLong(secKillId);
-		SecKill secKill = secKillService.getById(id);
-		logger.info(JSON.toJSONString(secKill));
-		return new ResponseEntity<String>(JSON.toJSONString(secKill),HttpStatus.OK);
+		byte[] secKill = null;
+		try {
+			secKill = secKillService.getById(id);
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		logger.info(JSON.toJSONString(ProtoStuffUtil.deserializer(secKill, SecKill.class)));
+		return new ResponseEntity<String>(JSON.toJSONString(ProtoStuffUtil.deserializer(secKill, SecKill.class)),HttpStatus.OK);
 	}
 
 }
