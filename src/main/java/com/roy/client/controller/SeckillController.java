@@ -17,32 +17,34 @@ import com.roy.publics.utils.ProtoStuffUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/seckill")
 @Api(tags = { "Controller" }, description = "Seckill")
 public class SeckillController {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private SecKillService secKillService;
 
-	
 	@RequestMapping(value = "/{secKillId}/detail", method = RequestMethod.GET)
 	@ApiOperation(value = "Get detail API", response = String.class)
-	public ResponseEntity<String> detail(@PathVariable("secKillId") String secKillId) throws Exception {
+	public ResponseEntity<String> detail(
+			@ApiParam(value = "id for seckill") @PathVariable("secKillId") String secKillId) throws Exception {
 		logger.info(secKillId);
 		long id = Long.parseLong(secKillId);
 		byte[] secKill = null;
 		try {
 			secKill = secKillService.getById(id);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.toString());
-			return new ResponseEntity<String>(e.toString(),HttpStatus.INTERNAL_SERVER_ERROR); 
+			return new ResponseEntity<String>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		logger.info(JSON.toJSONString(ProtoStuffUtil.deserializer(secKill, SecKill.class)));
-		return new ResponseEntity<String>(JSON.toJSONString(ProtoStuffUtil.deserializer(secKill, SecKill.class)),HttpStatus.OK);
+		return new ResponseEntity<String>(JSON.toJSONString(ProtoStuffUtil.deserializer(secKill, SecKill.class)),
+				HttpStatus.OK);
 	}
 
 }
