@@ -14,6 +14,6 @@
 	<dubbo:registry address="zookeeper://192.168.0.220:2181" />
 
 	<dubbo:reference id="seckillService"
-		interface="com.roy.publics.seckill.service.SecKillService" />
+		interface="com.roy.publics.seckill.service.SecKillService" timeout="300000" />
 
 </beans>
