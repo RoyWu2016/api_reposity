@@ -32,7 +32,7 @@ public class SeckillController {
 	@RequestMapping(value = "/{secKillId}/detail", method = RequestMethod.GET)
 	@ApiOperation(value = "Get detail API", response = String.class)
 	public ResponseEntity<String> detail(
-			@ApiParam(value = "id for seckill") @PathVariable("secKillId") String secKillId) throws Exception {
+			@ApiParam(value = "id for seckill like : 1004") @PathVariable("secKillId") String secKillId) throws Exception {
 		logger.info(secKillId);
 		long id = Long.parseLong(secKillId);
 		byte[] secKill = null;
